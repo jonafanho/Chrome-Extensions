@@ -5,10 +5,11 @@
 	"content_scripts": [
 	],
 	"chrome_url_overrides": {
-		"newtab": "newTab.html"
+		"newtab": "oba_new_tab.html"
 	},
 	"permissions": [
 		"geolocation",
 		"*://api.pugetsound.onebusaway.org/*"
-	]
+	],
+	"content_security_policy": "script-src 'self' 'unsafe-eval' 'sha256-6Dd9NXmB3CT+vXccKZ98W1n95znfgkfXJWb7TPfA+js=' 'sha256-rGdmfKdsmyQUyWs5yF8ivS3sFURk7XJTcIoRvWU0QqE=' https://unpkg.com/react@16/umd/react.development.js https://unpkg.com/react-dom@16/umd/react-dom.development.js https://unpkg.com/@babel/standalone/babel.min.js; object-src 'self'"
 }

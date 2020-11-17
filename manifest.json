@@ -1,0 +1,14 @@
+{
+	"manifest_version": 2,
+	"name": "Jonathan's Extension",
+	"version": "1.0",
+	"content_scripts": [
+	],
+	"chrome_url_overrides": {
+		"newtab": "newTab.html"
+	},
+	"permissions": [
+		"geolocation",
+		"*://api.pugetsound.onebusaway.org/*"
+	]
+}

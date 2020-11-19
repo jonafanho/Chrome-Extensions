@@ -1,11 +1,12 @@
 ﻿const NAME = "Jonathan";
 const TIMES = [5, 12, 18, 22];
-const IMAGE_OPTIONS = ["landscape", "nature", "flowers", "sky", "sunset"];
+const IMAGE_OPTIONS = ["landscape", "nature", "ocean", "sky", "space", "sunset"];
 
 const DEFAULT_LOCATION = [47.649281, -122.358524];
 const LOCATION_ACCURACY_THRESHOLD = 200;
 
 const DOMAIN = "http://api.pugetsound.onebusaway.org";
+const RADIUS = 1000;
 const MAX_ARRIVALS = 5;
 const REFRESH_INTERVAL = 10000;
 
@@ -28,6 +29,9 @@ function setup() {
 			this.accuracy = 0;
 			this.latitude = 0;
 			this.longitude = 0;
+			this.imageTitle = "";
+			this.imageAuthor = "";
+			this.imageUrl = "";
 			this.nearbyStops = [];
 			this.arrivals = [];
 			this.clock = this.clock.bind(this);
@@ -60,6 +64,7 @@ function setup() {
 				this.getNearbyStops(latitude, longitude);
 				this.getWeather(latitude, longitude);
 			}, {enableHighAccuracy: true, timeout: REFRESH_INTERVAL, maximumAge: 0});
+			this.generateImage();
 			document.body.onscroll = setFooterOpacity;
 		}
 
@@ -94,8 +99,29 @@ function setup() {
 			request.send();
 		}
 
+		generateImage() {
+			document.body.style.backgroundColor = "rgba(0,0,0,1)";
+			const request = new XMLHttpRequest();
+			request.open("GET", `https://api.unsplash.com/photos/random/?client_id=${UNSPLASH_KEY}&w=3840&orientation=landscape&query=${IMAGE_OPTIONS[Math.floor(Math.random() * IMAGE_OPTIONS.length)]}`);
+			request.onreadystatechange = () => {
+				if (request.readyState === 4 && request.status === 200) {
+					const parsed = JSON.parse(request.responseText);
+					this.imageTitle = parsed["description"] == null ? "" : parsed["description"];
+					this.imageAuthor = parsed["user"]["name"];
+					this.imageUrl = parsed["user"]["links"]["html"];
+					const image = new Image();
+					image.onload = () => {
+						document.documentElement.style.backgroundImage = `url(${image.src})`;
+						document.body.style.backgroundColor = "rgba(0,0,0,0.3)";
+					}
+					image.src = parsed["urls"]["custom"];
+				}
+			};
+			request.send();
+		}
+
 		getNearbyStops(latitude, longitude) {
-			const url = `${DOMAIN}/api/where/stops-for-location.json?key=${OBA_KEY}&lat=${latitude}&lon=${longitude}&radius=500&&includeReferences=false`;
+			const url = `${DOMAIN}/api/where/stops-for-location.json?key=${OBA_KEY}&lat=${latitude}&lon=${longitude}&radius=${RADIUS}&&includeReferences=false`;
 			const request = new XMLHttpRequest();
 			request.open("GET", url);
 			request.onreadystatechange = () => {
@@ -148,7 +174,7 @@ function setup() {
 				<div>
 					<div className="time_short">{this.state.time}</div>
 					<div className="greeting">{this.state.greeting}, {NAME}.</div>
-					<div className="subtitle">{this.temperatureMessage}</div>
+					<div className="subtitle" style={{opacity: this.temperatureMessage === "" ? 0 : 1}}>{this.temperatureMessage}</div>
 					<br/>
 					<br/>
 					<table>
@@ -161,7 +187,7 @@ function setup() {
 					<div id="footer">
 						<div>{this.dataMessage}</div>
 						<LocationMessage message={this.locationMessage} accuracy={this.accuracy} latitude={this.latitude} longitude={this.longitude}/>
-						<div>unsplash</div>
+						<UnsplashImage title={this.imageTitle} author={this.imageAuthor} url={this.imageUrl}/>
 					</div>
 				</div>
 			);
@@ -212,6 +238,18 @@ function LocationMessage(props) {
 	const {message, accuracy, latitude, longitude} = props;
 	const url = `https://www.google.com.hk/maps/place/${Math.abs(latitude)}${latitude >= 0 ? "N" : "S"}+${Math.abs(longitude)}${longitude >= 0 ? "E" : "W"}`;
 	return message === "" ? null : <div>{message} (<a href={url} target="_blank">Accuracy: {accuracy}m</a>)</div>;
+}
+
+function UnsplashImage(props) {
+	const {title, author, url} = props;
+	return author === "" || url === "" ? null : (
+		<div>
+			{title.length === 0 ? "Photo" : `"${title.charAt(0).toUpperCase() + title.substr(1)}"`} by&nbsp;
+			<a href={`${url}?utm_source=jonathans_new_tab&utm_medium=referral`} target="_blank">{author}</a>
+			&nbsp;on&nbsp;
+			<a href="https://unsplash.com/?utm_source=jonathans_new_tab&utm_medium=referral" target="_blank">Unsplash</a>
+		</div>
+	);
 }
 
 function millisecondsToTimeString(milliseconds) {

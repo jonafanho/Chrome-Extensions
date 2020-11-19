@@ -6,17 +6,26 @@
 }
 
 body {
-	background-color: black;
 	font-family: "Helvetica", sans-serif;
-	margin: 0 2em;
+	margin: 0;
+	transition: background-color 2s;
 }
 
 table {
+	padding: 0 2em;
 	width: 100%;
+}
+
+tr, td, div {
+	animation: fadeIn ease 0.2s;
 }
 
 a {
 	color: white;
+}
+
+::-webkit-scrollbar {
+	width: 0;
 }
 
 .time_short {
@@ -30,6 +39,7 @@ a {
 .subtitle {
 	font-size: 2em;
 	margin: 0.5em;
+	transition: opacity 0.2s;
 }
 
 .column_small {
@@ -42,6 +52,15 @@ a {
 
 .fill {
 	height: 100%;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 #footer {

@@ -10,5 +10,5 @@
 	"permissions": [
 		"geolocation"
 	],
-	"content_security_policy": "script-src 'self' 'unsafe-eval' 'sha256-umjqFx8jJD4jDLtN4B9Be/qG2/kpT0X7q30dev71cOw=' 'sha256-6Dd9NXmB3CT+vXccKZ98W1n95znfgkfXJWb7TPfA+js=' https://unpkg.com/react@16/umd/react.development.js https://unpkg.com/react-dom@16/umd/react-dom.development.js https://unpkg.com/@babel/standalone/babel.min.js; object-src 'self'"
+	"content_security_policy": "script-src 'self' 'unsafe-eval' 'sha256-6MfBUWXkxJY+Wf4qAXUn6oFquQrfzt5fOVxYIFDq4OQ=' 'sha256-6Dd9NXmB3CT+vXccKZ98W1n95znfgkfXJWb7TPfA+js=' https://unpkg.com/react@16/umd/react.development.js https://unpkg.com/react-dom@16/umd/react-dom.development.js https://unpkg.com/@babel/standalone/babel.min.js; object-src 'self'"
 }

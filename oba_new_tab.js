@@ -21,10 +21,11 @@ function setup() {
 				milliseconds: 0,
 				time: "",
 				greeting: "",
+				temperatureMessage: "",
+				dataLastUpdated: new Date(),
+				dataMessage: "",
+				arrivals: []
 			};
-			this.temperatureMessage = "";
-			this.dataMessage = "";
-			this.dataLastUpdated = new Date();
 			this.locationMessage = "";
 			this.accuracy = 0;
 			this.latitude = 0;
@@ -33,7 +34,6 @@ function setup() {
 			this.imageAuthor = "";
 			this.imageUrl = "";
 			this.nearbyStops = [];
-			this.arrivals = [];
 			this.clock = this.clock.bind(this);
 			this.getWeather = this.getWeather.bind(this);
 			this.getNearbyStops = this.getNearbyStops.bind(this);
@@ -80,7 +80,7 @@ function setup() {
 			} else if (now.getHours() < TIMES[3]) {
 				greeting = "Good evening";
 			}
-			if (now.getTime() - this.dataLastUpdated >= REFRESH_INTERVAL) {
+			if (now.getTime() - this.state.dataLastUpdated >= REFRESH_INTERVAL) {
 				this.getStop(0, []);
 			}
 			this.setState({milliseconds: now.getTime(), time: getTimeNowShort(now), greeting: greeting}, setFooterOpacity);
@@ -93,7 +93,7 @@ function setup() {
 			request.onreadystatechange = () => {
 				if (request.readyState === 4 && request.status === 200) {
 					const parsed = JSON.parse(request.responseText);
-					this.temperatureMessage = `It's ${Math.round(parsed["main"]["temp"] - 273.15)}°C in ${parsed.name}. Where would you like to go today?`;
+					this.setState({temperatureMessage: `It's ${Math.round(parsed["main"]["temp"] - 273.15)}°C in ${parsed.name}. Where would you like to go today?`});
 				}
 			};
 			request.send();
@@ -163,9 +163,7 @@ function setup() {
 				request.send();
 			} else {
 				const date = new Date();
-				this.dataLastUpdated = date.getTime();
-				this.dataMessage = "Data last updated: " + getTimeNow(date);
-				this.arrivals = list;
+				this.setState({dataLastUpdated: date.getTime(), dataMessage: "Data last updated: " + getTimeNow(date), arrivals: list});
 			}
 		}
 
@@ -174,18 +172,18 @@ function setup() {
 				<div>
 					<div className="time_short">{this.state.time}</div>
 					<div className="greeting">{this.state.greeting}, {NAME}.</div>
-					<div className="subtitle" style={{opacity: this.temperatureMessage === "" ? 0 : 1}}>{this.temperatureMessage}</div>
+					<div className="subtitle" style={{opacity: this.state.temperatureMessage === "" ? 0 : 1}}>{this.state.temperatureMessage}</div>
 					<br/>
 					<br/>
 					<table>
 						<tbody>
-						{this.nearbyStops.map(stop => <StopWithArrivals key={stop["id"]} milliseconds={this.state.milliseconds} stop={stop} arrivals={this.arrivals.filter(arrival => arrival["stopId"] === stop["id"])}/>)}
+						{this.nearbyStops.map(stop => <StopWithArrivals key={stop["id"]} milliseconds={this.state.milliseconds} stop={stop} arrivals={this.state.arrivals.filter(arrival => arrival["stopId"] === stop["id"])}/>)}
 						</tbody>
 					</table>
 					<br/>
 					<br/>
 					<div id="footer">
-						<div>{this.dataMessage}</div>
+						<div>{this.state.dataMessage}</div>
 						<LocationMessage message={this.locationMessage} accuracy={this.accuracy} latitude={this.latitude} longitude={this.longitude}/>
 						<UnsplashImage title={this.imageTitle} author={this.imageAuthor} url={this.imageUrl}/>
 					</div>

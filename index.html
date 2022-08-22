@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<html lang="en">
+<head>
+	<title>Jonathan's New Tab</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="index.css">
+	<script src="index.js" type="module"></script>
+	<script src="settings.js" type="module"></script>
+	<script src="fetch.js" type="module"></script>
+</head>
+<body>
+<div class="flex-row">
+	<div class="main-column no-overflow-text">
+		<div class="hidden" id="clock">
+			<h1 id="time"></h1>
+			<h2 id="date"></h2>
+		</div>
+		<div class="spacer-large"></div>
+		<div class="hidden" id="stops"></div>
+	</div>
+	<div class="spacer-large"></div>
+	<div class="main-column no-overflow-text">
+		<div class="hidden" id="weather">
+			<div class="flex-row">
+				<h1 id="temperature">&nbsp;</h1>
+				<div class="spacer-large"></div>
+				<div class="flex-column centered-flex-content">
+					<h2 class="temperature-low-high" id="temperature-low"></h2>
+					<h2 class="temperature-low-high" id="temperature-high"></h2>
+				</div>
+				<div class="spacer-large"></div>
+				<img class="image-large centered-flex-content grayscale" id="weather-icon" src="" alt=""/>
+			</div>
+			<h2 id="weather-details">&nbsp;</h2>
+		</div>
+		<div class="spacer-large"></div>
+		<div class="hidden" id="server">
+			<div id="server-summary"></div>
+			<div id="server-info"></div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

@@ -2,6 +2,7 @@
 	background: black;
 	color: white;
 	font-family: "Helvetica", sans-serif;
+	font-size: medium;
 	user-select: none;
 	transition: opacity 0.5s;
 	-ms-overflow-style: none;
@@ -85,8 +86,4 @@ h3 {
 .spacer-small {
 	width: 1em;
 	height: 1em;
-}
-
-.temperature-low-high {
-	/*margin: 0.2em 0 0.2em 2em;*/
 }

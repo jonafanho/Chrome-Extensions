@@ -104,10 +104,24 @@ new FetchData(() => "https://jonafanho.no-ip.org/lets-play-system-map/info", REF
 				`<div class="centered-flex-content">${player}</div>` +
 				`</div>`;
 		});
-		serverSummaryElement.innerHTML += `<div class="spacer-small"></div>`;
+		if (playersInDimension.length > 0) {
+			serverSummaryElement.innerHTML += `<div class="spacer-small"></div>`;
+		}
 	});
 	document.getElementById("server-summary").innerHTML = `<h3>There ${playerCount === 1 ? "is" : "are"} ${playerCount > 0 ? playerCount : "no"} player${playerCount === 1 ? "" : "s"} online.</h3>`;
 	document.getElementById("server").style.opacity = "1";
+}).fetchData();
+new FetchData(() => `https://youtube.googleapis.com/youtube/v3/channels?part=statistics&id=UCdfSBvJbW1VfqaB6pxEtG6A&key=${SETTINGS.youtubeKey}`, REFRESH_WEATHER_INTERVAL, false, () => true, result => {
+	const youtubeElement = document.getElementById("youtube");
+	const {viewCount, subscriberCount, videoCount} = result["items"][0]["statistics"];
+	youtubeElement.innerHTML =
+		`<h3>Jonathan's YouTube Channel (${videoCount} videos)</h3>` +
+		`<div>Subscribers</div>` +
+		`<h2>${subscriberCount}</h2>` +
+		`<div class="spacer-small"></div>` +
+		`<div>Views</div>` +
+		`<h2>${viewCount}</h2>`;
+	youtubeElement.style.opacity = "1";
 }).fetchData();
 
 const refreshArrivals = () => {
@@ -118,6 +132,7 @@ const refreshArrivals = () => {
 
 	stopData.forEach(stopDetails => {
 		const {title, arrivals} = stopDetails;
+		const tempVisitedArrivals = [];
 		let arrivalsHtml = "";
 		let arrivalCount = 0;
 
@@ -126,7 +141,7 @@ const refreshArrivals = () => {
 			const key = `${route}_${destination}`;
 			const arrivalMillis = arrival - millis;
 
-			if (!visitedArrivals.includes(key)) {
+			if (!visitedArrivals.includes(key) || tempVisitedArrivals.includes(key)) {
 				arrivalsHtml +=
 					`<div class="flex-row">` +
 					(route ? `<div class="no-overflow-text" style="width: 4em; flex-shrink: 0">${route}</div>` : "") +
@@ -136,6 +151,7 @@ const refreshArrivals = () => {
 					`<div class="no-overflow-text" style="width: 6em; flex-shrink: 0; text-align: right">${arrivalMillis < 0 ? "Gone" : millisecondsToTimeString(arrivalMillis)}</div>` +
 					`</div>`
 				arrivalCount++;
+				tempVisitedArrivals.push(key);
 				visitedArrivals.push(key);
 			}
 

@@ -123,6 +123,11 @@ new FetchData(() => `https://youtube.googleapis.com/youtube/v3/channels?part=sta
 		`<h2>${viewCount}</h2>`;
 	youtubeElement.style.opacity = "1";
 }).fetchData();
+fetch("https://icanhazdadjoke.com/", {cache: "no-cache", headers: {Accept: "application/json"}}).then(response => response.json()).then(result => {
+	const jokeElement = document.getElementById("joke");
+	jokeElement.innerHTML = `<div>${result["joke"]}</div>`;
+	jokeElement.style.opacity = "1";
+});
 
 const refreshArrivals = () => {
 	const stopsElement = document.getElementById("stops");

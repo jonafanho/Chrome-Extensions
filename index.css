@@ -29,6 +29,10 @@ h3 {
 	margin: 1em 0;
 }
 
+#joke {
+	white-space: normal;
+}
+
 .centered-flex-content {
 	align-self: center;
 }

@@ -2,10 +2,19 @@
 	"manifest_version": 3,
 	"name": "Jonathan's Extension",
 	"version": "1.0",
+	"background": {
+		"service_worker": "background.js"
+	},
+	"host_permissions": [
+		"https://*/*"
+	],
 	"chrome_url_overrides": {
 		"newtab": "index.html"
 	},
 	"permissions": [
-		"geolocation"
+		"geolocation",
+		"webNavigation",
+		"scripting",
+		"tabs"
 	]
 }

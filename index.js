@@ -212,4 +212,4 @@ const millisecondsToTimeString = milliseconds => {
 	return (hours === 0 ? minutes : hours + ":" + minutes.toString().padStart(2, "0")) + ":" + seconds.toString().padStart(2, "0");
 };
 
-const formatMTRString = text => text.split("\|\|")[0].replace(/\|/g, "");
+const formatMTRString = text => text.split("\|\|")[0].replace(/\|/g, " ");

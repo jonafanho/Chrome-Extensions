@@ -91,3 +91,9 @@ h3 {
 	width: 1em;
 	height: 1em;
 }
+
+.riding-route {
+	align-self: end;
+	padding-left: 0.4em;
+	width: 50%;
+}

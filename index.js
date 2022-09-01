@@ -97,11 +97,17 @@ new FetchData(() => "https://jonafanho.no-ip.org/lets-play-system-map/info", REF
 		playerCount += playersInDimension.length;
 		playersInDimension.forEach(playerDetails => {
 			const {player, name, number, destination, circular, color} = playerDetails;
+			const route = name === "" ? "" :
+				`<div class="flex-column centered-flex-content riding-route" style="border-left: 0.2em solid #${parseInt(color).toString(16).padStart(6, "0")}">` +
+				`<div style="font-size: smaller">Riding ${number === "" ? "" : `${number} `}${formatMTRString(name)}</div>` +
+				`<div style="font-size: smaller">${destination === "" ? "" : `${circular === "cw" ? "clockwise" : circular === "ccw" ? "anticlockwise" : ""} to ${formatMTRString(destination)}`}</div>` +
+				`</div>`;
 			serverSummaryElement.innerHTML +=
 				`<div class="flex-row grayscale">` +
 				`<img class="image-small" src="https://mc-heads.net/avatar/${player}" alt=""/>` +
 				`<div class="spacer-small"></div>` +
-				`<div class="centered-flex-content">${player}</div>` +
+				`<div class="centered-flex-content" style="width: 12em">${player}</div>` +
+				route +
 				`</div>`;
 		});
 		if (playersInDimension.length > 0) {
@@ -205,3 +211,5 @@ const millisecondsToTimeString = milliseconds => {
 	const seconds = Math.floor((milliseconds / 1000) % 60);
 	return (hours === 0 ? minutes : hours + ":" + minutes.toString().padStart(2, "0")) + ":" + seconds.toString().padStart(2, "0");
 };
+
+const formatMTRString = text => text.split("\|\|")[0].replace(/\|/g, "");
